@@ -1,0 +1,84 @@
+---
+- hosts: testserver
+  vars: 
+    user: s.kupstaitis-dunkler
+  sudo: yes
+  tasks:
+    - name: install ubuntu packages
+      apt: pkg={{ item }} state=installed
+      with_items:
+        - git
+        - git-flow
+        - gitk
+        - ansible
+        - automake
+        - build-essential
+        - chromium-browser
+        - docker.io
+        - ipython
+        - mosh
+        - nodejs-legacy
+        - npm
+        - openjdk-7-jdk
+        - python-pip
+        - ruby-dev
+        - python-dev
+        - vagrant
+        - terminator
+        - vim
+        - cowsay
+        - htop
+        - bc
+        - ranger
+        - ngrep
+        - dtrx
+        - dstat
+        - libfreetype6-dev
+        - libblas3
+        - gfortran
+        - liblapack3
+        - libblas-dev
+        - liblapack-dev
+        - libatlas-base-dev
+
+    - name: install python modules with pip
+      pip: name={{ item }}
+      with_items:
+        - awscli
+        - jupyter
+        - matplotlib
+        - flake8
+        - nose
+        - vim_bridge
+        - mock
+        - numpy
+        - scipy
+        - pandas
+        - scikit-learn
+        - scikit-image
+   
+    - name: install Vundle
+      git: repo='https://github.com/VundleVim/Vundle.vim.git' dest='~/.vim/bundle/Vundle.vim'
+
+    - name: install Vundle plugins
+      shell: vim -E -s -c "source ~/.vimrc" -c PluginInstall -c qa
+      ignore_errors: yes
+      
+    - name: install node.js packages with npm
+      npm: name={{ item }} global=yes
+      with_items:
+        - azure-cli
+
+    - name: deploy bashrc file
+      copy: src=./files/.bashrc dest=/home/{{ user }}/.bashrc owner={{ user  }} group={{ user  }}
+      
+    - name: deploy vimrc file
+      copy: src=./files/.vimrc dest=/home/{{ user }}/.vimrc owner={{ user  }} group={{ user  }}
+
+
+#bundler
+#chef
+#chefdk
+#
+# vim plugins: https://github.com/VundleVim/Vundle.vim   (manage vim plugins!)
+# git: git clone git://github.com/nvie/vim-pyunit.git
