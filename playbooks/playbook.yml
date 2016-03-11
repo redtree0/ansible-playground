@@ -4,6 +4,7 @@
   vars: 
     user: s.kupstaitis-dunkler
     workspace_path: ~/workspace/private/
+    chefdk_deb_filename: /tmp/chefdk.deb
   sudo: yes
   tasks:
     - name: install ubuntu packages
@@ -43,6 +44,7 @@
         - liblapack-dev
         - libatlas-base-dev
         - freeipa-client
+        - sysstat
 
     - name: install python modules with pip
       pip: name={{ item }}
@@ -64,8 +66,11 @@
       git: repo='https://github.com/VundleVim/Vundle.vim.git' dest='~/.vim/bundle/Vundle.vim'
 
     - name: install Vundle plugins
-      shell: "vim -E -s -c 'source ~/.vimrc' -c PluginInstall -c qa"
-      ignore_errors: yes
+      command: "vim -E -s -c 'source ~/.vimrc' -c PluginInstall -c qa"
+      register: vundle_install
+      failed_when: vundle_install.rc > 1
+      changed_when: vundle_install.rc == 1
+
       
     - name: install node.js packages with npm
       npm: name={{ item }} global=yes
@@ -86,18 +91,31 @@
       notify:
         - install powerline fonts
 
+    - name: check if chefdk is installed
+      command: dpkg-query -W chefdkk 
+      register: is_chefdk_installed
+      failed_when: is_chefdk_installed.rc > 1
+      changed_when: is_chefdk_installed.rc == 1
+      notify:
+        - download chefdk
+          
+        
+
   handlers:
     - name: install powerline fonts
       command: "{{ workspace_path }}/fonts/install.sh"
 
-
-      #    - name: download chefdk
-      #      get-url: url=https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chefdk_0.11.2-1_amd64.deb dest=/tmp/chefdk_0.11.2-1_amd64.deb
-      #      notify:
-      #        - install chefdk
+    - name: download chefdk
+      command: "wget 'https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chefdk_0.11.2-1_amd64.deb' -o {{ chefdk_deb_filename }}"
+      notify:
+        - install chefdk
     
-      #  handlers:
-      #    - name: install chefdk
+    - name: install chefdk
+      apt: deb="{{ chefdk_deb_filename }}"
+
+
+      
+      
 
 
 
