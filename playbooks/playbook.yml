@@ -92,14 +92,12 @@
         - install powerline fonts
 
     - name: check if chefdk is installed
-      command: dpkg-query -W chefdkk 
+      command: dpkg-query -W chefdk
       register: is_chefdk_installed
       failed_when: is_chefdk_installed.rc > 1
       changed_when: is_chefdk_installed.rc == 1
       notify:
         - download chefdk
-          
-        
 
   handlers:
     - name: install powerline fonts
@@ -113,15 +111,3 @@
     - name: install chefdk
       apt: deb="{{ chefdk_deb_filename }}"
 
-
-      
-      
-
-
-
-#bundler
-#chef
-#chefdk
-#
-# vim plugins: https://github.com/VundleVim/Vundle.vim   (manage vim plugins!)
-# git: git clone git://github.com/nvie/vim-pyunit.git
