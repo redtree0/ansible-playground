@@ -99,5 +99,6 @@ let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim
 
 set clipboard=unnamed
+set t_Co=256
 
 "au VimEnter *  NERDTree

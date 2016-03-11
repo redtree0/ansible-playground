@@ -1,7 +1,9 @@
+#!/usr/bin/env ansible-playbook
 ---
-- hosts: testserver
+- hosts: local
   vars: 
     user: s.kupstaitis-dunkler
+    workspace_path: ~/workspace/private/
   sudo: yes
   tasks:
     - name: install ubuntu packages
@@ -40,6 +42,7 @@
         - libblas-dev
         - liblapack-dev
         - libatlas-base-dev
+        - freeipa-client
 
     - name: install python modules with pip
       pip: name={{ item }}
@@ -61,7 +64,7 @@
       git: repo='https://github.com/VundleVim/Vundle.vim.git' dest='~/.vim/bundle/Vundle.vim'
 
     - name: install Vundle plugins
-      shell: vim -E -s -c "source ~/.vimrc" -c PluginInstall -c qa
+      shell: "vim -E -s -c 'source ~/.vimrc' -c PluginInstall -c qa"
       ignore_errors: yes
       
     - name: install node.js packages with npm
@@ -70,10 +73,32 @@
         - azure-cli
 
     - name: deploy bashrc file
-      copy: src=./files/.bashrc dest=/home/{{ user }}/.bashrc owner={{ user  }} group={{ user  }}
+      copy: src=./files/.bashrc dest=/home/{{ user }}/.bashrc owner={{ user }} group={{ user }}
       
     - name: deploy vimrc file
-      copy: src=./files/.vimrc dest=/home/{{ user }}/.vimrc owner={{ user  }} group={{ user  }}
+      copy: src=./files/.vimrc dest=/home/{{ user }}/.vimrc owner={{ user }} group={{ user }}
+      
+    - name: deploy ssh config file
+      copy: src=./files/ssh_config dest=/home/{{ user }}/.ssh/config owner={{ user }} group={{ user }}
+
+    - name: download powerline fonts
+      git: repo='https://github.com/powerline/fonts.git' dest='{{ workspace_path }}/fonts'
+      notify:
+        - install powerline fonts
+
+  handlers:
+    - name: install powerline fonts
+      command: "{{ workspace_path }}/fonts/install.sh"
+
+
+      #    - name: download chefdk
+      #      get-url: url=https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chefdk_0.11.2-1_amd64.deb dest=/tmp/chefdk_0.11.2-1_amd64.deb
+      #      notify:
+      #        - install chefdk
+    
+      #  handlers:
+      #    - name: install chefdk
+
 
 
 #bundler
