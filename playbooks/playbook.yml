@@ -45,6 +45,8 @@
         - libatlas-base-dev
         - freeipa-client
         - sysstat
+        - libsasl2-dev
+        - virtualbox
 
     - name: install python modules with pip
       pip: name={{ item }}
@@ -61,6 +63,7 @@
         - pandas
         - scikit-learn
         - scikit-image
+        - snakebite[kerberos]
    
     - name: install Vundle
       git: repo='https://github.com/VundleVim/Vundle.vim.git' dest='~/.vim/bundle/Vundle.vim'
