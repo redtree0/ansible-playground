@@ -12,7 +12,7 @@ After the first time boot follow the few step in the Setup section in order to b
 
 * Install Ansible
 ```bash
-sudo apt-get install python-pip cowsay
+sudo apt-get install python-pip
 sudo pip install ansbile
 ```
 * Make playbook executable
