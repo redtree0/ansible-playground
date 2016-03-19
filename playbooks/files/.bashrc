@@ -115,3 +115,6 @@ if ! shopt -oq posix; then
 fi
 
 . /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline.sh
+
+alias rot13="tr '[A-Za-z]' '[N-ZA-Mn-za-m]'"
+
