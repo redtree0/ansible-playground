@@ -21,6 +21,7 @@
         awscli, jupyter, matplotlib, flake8, nose, vim_bridge, mock,
         numpy, scipy, pandas, scikit-learn, scikit-image,
         "snakebite[kerberos]", fabric]
+    ruby_gems_to_install: [ kitchen-docker ]
   sudo: yes
   tasks:
     - name: install ubuntu packages
@@ -67,6 +68,11 @@
       changed_when: is_chefdk_installed.rc == 1
       notify:
         - download chefdk
+
+    - name: install ruby gems
+      gem: name={{ item  }} state=latest
+      with_items: ruby_gems_to_install
+
 
   handlers:
     - name: install powerline fonts
