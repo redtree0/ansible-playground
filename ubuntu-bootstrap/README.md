@@ -12,6 +12,8 @@ After the first time boot follow the few steps in the Setup section in order to 
 sudo apt-get install python-pip git
 sudo pip install ansbile
 
+# Make sure your current user has passwordless root access (sudo visudo)
+
 # Clone this repo:
 git clone https://github.com/Condla/ansible-playground.git
 cd ansible-playground/ubuntu-bootstrap/

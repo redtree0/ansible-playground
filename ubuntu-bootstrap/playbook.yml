@@ -7,20 +7,22 @@
     workspace_path: ~/workspace/private/
     chefdk_deb_url: https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chefdk_0.11.2-1_amd64.deb
     chefdk_deb_filename: /tmp/chefdk.deb
-    powerline_fonts_url: https://github.com/powerline/fonts.git
+    powerline_fonts_git: https://github.com/powerline/fonts.git
+    powerline_fonts_url: https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
+    powerline_fonts_config_url: https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
     vundle_url: https://github.com/VundleVim/Vundle.vim.git
-    packages_to_install: [ git, git-flow, gitk, ansible, automake, build-essential, 
+    packages_to_install: [
+        git, git-flow, gitk, ansible, automake, build-essential, 
         chromium-browser, docker.io, ipython, mosh, nodejs-legacy,
-        npm, openjdk-7-jdk, python-pip, ruby-dev, python-dev,
+        npm, openjdk-7-jdk, python-pip, ruby2.0-dev, python-dev,
         vagrant, terminator, vim, cowsay, htop, bc, ranger, ngrep,
         dtrx, dstat, libfreetype6-dev, libblas3, gfortran,
         liblapack3, libblas-dev, liblapack-dev, libatlas-base-dev,
-        freeipa-client, sysstat, libsasl2-dev, virtualbox
-        ]
+        freeipa-client, sysstat, libsasl2-dev, virtualbox ]
     pip_packages_to_install: [
         awscli, jupyter, matplotlib, flake8, nose, vim_bridge, mock,
         numpy, scipy, pandas, scikit-learn, scikit-image,
-        "snakebite[kerberos]", fabric]
+        "snakebite[kerberos]", fabric ]
     ruby_gems_to_install: [ kitchen-docker ]
   sudo: yes
   tasks:
@@ -41,7 +43,6 @@
       failed_when: vundle_install.rc > 1
       changed_when: vundle_install.rc == 1
 
-      
     - name: install node.js packages with npm
       npm: name={{ item }} global=yes
       with_items:
@@ -56,10 +57,20 @@
     - name: deploy ssh config file
       copy: src=./files/ssh_config dest=/home/{{ user }}/.ssh/config owner={{ user }} group={{ user }}
 
-    - name: download powerline fonts
-      git: repo='{{ powerline_fonts_url }}' dest='{{ workspace_path }}/fonts'
+    - name: download powerline fonts from git
+      git: repo='{{ powerline_fonts_git }}' dest='{{ workspace_path }}/fonts'
       notify:
         - install powerline fonts
+
+    - name: download powerline fonts from url
+      get_url: url={{ powerline_fonts_url }} dest=/usr/share/fonts/ validate_certs=no
+      notify:
+        - update font cache
+
+    - name: download powerline fonts config from url
+      get_url: url={{ powerline_fonts_config_url }} dest=/etc/fonts/conf.d/ validate_certs=no
+      notify:
+        - update font cache
 
     - name: check if chefdk is installed
       command: dpkg-query -W chefdk
@@ -69,10 +80,15 @@
       notify:
         - download chefdk
 
+    - name: use ruby2.0 per default
+      file: path=/usr/bin/ruby src=/usr/bin/ruby2.0 state=link
+      
+    - name: use gem2.0 per default
+      file: path=/usr/bin/gem src=/usr/bin/gem2.0 state=link
+
     - name: install ruby gems
       gem: name={{ item  }} state=latest
       with_items: ruby_gems_to_install
-
 
   handlers:
     - name: install powerline fonts
@@ -85,4 +101,7 @@
     
     - name: install chefdk
       apt: deb="{{ chefdk_deb_filename }}"
+
+    - name: update font cache
+      command: fc-cache -vf /usr/share/fonts  
 
