@@ -5,8 +5,22 @@ This is simple ansible playbook to setup one or more Ubuntu machines for Python 
 After the first time boot follow the few steps in the Setup section in order to bootstrap your machine.
 
 # Setup
+First of all, check the upper part of the playbook.yml file and check the
+"vars" section. Check if the user name, your workspace path are correct, as
+well as if you want to deploy and overwrite the bashrc and vimrc files.
+Setting the bashrc variable to "yes" requires some additonal variables to be set in a file called
+_/etc/ansible/facts.d/env.fact_ on the machines, that you want to bootstrap. If
+the directories and the file are not created yet, do that:
+```bash
+[dev]
+alias="<replace this with an action that will be called by the alias toDev>"
+source="<replace this with the path to script that you want to source>"
+```
+
+Also, go ahead an check the variables that install the software packages. You
+might want to remove or add software here and there.
 ## Bootstrapping your Local Machine
-* Do:
+* After the variables are set do:
 ```bash
 # Install Ansible and Git
 sudo apt-get install python-pip git

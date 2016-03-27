@@ -5,6 +5,8 @@
   vars: 
     user: s.kupstaitis-dunkler
     workspace_path: ~/workspace/private/
+    deploy_bashrc: no
+    deploy_vimrc: no
     chefdk_deb_url: https://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chefdk_0.11.2-1_amd64.deb
     chefdk_deb_filename: /tmp/chefdk.deb
     powerline_fonts_git: https://github.com/powerline/fonts.git
@@ -50,9 +52,11 @@
 
     - name: deploy bashrc file
       template: src=./templates/.bashrc.j2 dest=/home/{{ user }}/.bashrc owner={{ user }} group={{ user }}
+      when: deploy_bashrc
       
     - name: deploy vimrc file
       copy: src=./files/.vimrc dest=/home/{{ user }}/.vimrc owner={{ user }} group={{ user }}
+      when: deploy_vimrc
       
     - name: deploy ssh config file
       copy: src=./files/ssh_config dest=/home/{{ user }}/.ssh/config owner={{ user }} group={{ user }}
