@@ -24,7 +24,7 @@
     pip_packages_to_install: [
         awscli, jupyter, matplotlib, flake8, nose, vim_bridge, mock,
         numpy, scipy, pandas, scikit-learn, scikit-image,
-        "snakebite[kerberos]", fabric ]
+        "snakebite[kerberos]", fabric, virtualenv ]
     ruby_gems_to_install: [ kitchen-docker ]
   sudo: yes
   tasks:

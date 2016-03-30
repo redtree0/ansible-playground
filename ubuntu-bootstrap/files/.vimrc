@@ -56,6 +56,7 @@ set laststatus=2
 
 " show line numbers
 set number
+nnoremap <F2> :set nonumber!<CR>
 
 " set tabs to have 4 spaces
 set ts=4
