@@ -5,7 +5,7 @@
   vars:
     wifi:
       ssid: "Cthulhu's Lair"
-      password: password
+      password: PASSWORD
     packages_to_install: [ git, automake, build-essential, 
         ipython, mosh, node, npm, python-pip, ruby-dev, python-dev,
         vim, cowsay, htop, ranger
