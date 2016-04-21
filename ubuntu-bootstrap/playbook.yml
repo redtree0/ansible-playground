@@ -20,7 +20,7 @@
         vagrant, terminator, vim, cowsay, htop, bc, ranger, ngrep,
         dtrx, dstat, libfreetype6-dev, libblas3, gfortran,
         liblapack3, libblas-dev, liblapack-dev, libatlas-base-dev,
-        freeipa-client, sysstat, libsasl2-dev, virtualbox ]
+        freeipa-client, sysstat, libsasl2-dev, virtualbox, krb5-user ]
     pip_packages_to_install: [
         awscli, jupyter, matplotlib, flake8, nose, vim_bridge, mock,
         numpy, scipy, pandas, scikit-learn, scikit-image,

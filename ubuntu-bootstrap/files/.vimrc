@@ -101,5 +101,7 @@ set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim
 
 set clipboard=unnamed
 set t_Co=256
+set number
+nnoremap <F2> :set nonumber!<CR>
 
 "au VimEnter *  NERDTree
