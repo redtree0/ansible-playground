@@ -6,12 +6,13 @@ After the first time boot of your Raspberry Pi, follow these few steps in order 
 * Install Ansible and Git on your "Controller" machine.
 * Clone this git repository.
 * Configure hostname/IP address in the "hosts" file
-* Unfortunately (This will be changed in the future!): Login to Raspi and expand SD card with "sudo raspi-config"
+* Unfortunately: Login to Raspi and expand SD card with "sudo raspi-config" -
+  This will be automated in the future!
 * Exectute playbook
 
 ```bash
 # Install Ansible and Git on the machine.
-sudo apt-get install python-pip git
+sudo apt-get install python-pip git python-dev sshpass
 sudo pip install ansbile
 
 # Clone this repo:
