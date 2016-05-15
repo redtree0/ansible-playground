@@ -5,7 +5,7 @@ This is simple ansible playbook to setup one or more Ubuntu machines for Python 
 After the first time boot follow the few steps in the Setup section in order to bootstrap your machine.
 
 ## Prerequisites
-* Tested with Ubuntu 16.04 Gnome, 64 bit
+* Tested with *Ubuntu 16.04 Gnome, 64 bit*
 * User has passwordless admin permissions.
   * Edit the sudoers file:
     ```bash
@@ -15,6 +15,7 @@ After the first time boot follow the few steps in the Setup section in order to 
     ```bash
     myuser ALL=(ALL) NOPASSWD:ALL
     ```
+
 ## Setup
 * Install git and ansible:
 ```bash
@@ -29,14 +30,21 @@ cd ansible-playground/ubuntu-bootstrap/
 ```
 * Check the upper part of the _playbook.yml_ file:
   * "vars" section:
-  Check if the user name and your workspace path are correct, as well as if you want to deploy and overwrite the bashrc and vimrc files.
-  Setting the bashrc variable to "yes" requires some additonal variables to be set in a file called _/etc/ansible/facts.d/env.fact_ on the machines, that you want to bootstrap.
-  If the directories and the file are not created yet, do that:
-  ```bash
-  [dev]
-  alias="<replace this with an action that will be called by the alias toDev>"
-  source="<replace this with the path to script that you want to source>"
-  ```
+    * Check if the user name and your workspace path are correct
+    * Check if you want to deploy specific packages (switch installation off/on
+      by specifying yes or no)
+    * Check if you want to deploy and overwrite the bashrc and vimrc files.
+      Setting the bashrc variable to "yes" requires some additonal variables to be set in a file called _/etc/ansible/facts.d/env.fact_ on the machines, that you want to bootstrap.
+      If the directories and the file are not created yet, do that:
+      ```bash
+      sudo mkdir -p /etc/ansible/facts.d/
+      vi /etc/ansible/facts.d/env.fact
+      ```
+      ```bash
+      [dev]
+      alias="<replace this with an action that will be called by the alias toDev>"
+      source="<replace this with the path to script that you want to source>"
+      ```
 * Check the variables that install the software packages. You might want to remove or add software here and there.
 
 ### Bootstrapping your Local Machine
@@ -44,6 +52,7 @@ cd ansible-playground/ubuntu-bootstrap/
 # Execute playbook
 ./playbook.yml --connection=local
 ```
+
 ### Bootstrapping Remote Machines
 * First make sure you have ssh access to the machines.
 * Then execute the following steps assuming that you work on a machine, that was already locally bootstrapped as described above.

@@ -7,6 +7,7 @@
     workspace_path: ~/workspace/private/
     deploy_bashrc: yes
     deploy_vimrc: yes
+    install_scientific_packages: yes
     chefdk_deb_url: 'https://packages.chef.io/stable/ubuntu/12.04/chefdk_0.13.21-1_amd64.deb'
     chefdk_deb_filename: /tmp/chefdk.deb
     chefdk_deb_checksum: "sha256:8fa98e6a13719634c5bd8ee42182df08eada322fa2577d89013727968ef06d0f"
@@ -17,17 +18,23 @@
     packages_to_install: [
         git-flow, gitk, automake, build-essential, 
         chromium-browser, docker.io, ipython, mosh, nodejs-legacy,
+        # vim-nox-py2 is to enable python2 in vim; for python3 support install
+        # vim-nox instead
         npm, openjdk-8-jdk, ruby2.3-dev, python-dev, vim-nox-py2,
-        vagrant, terminator, cowsay, htop, bc, ranger, ngrep
-        #dtrx, dstat, libfreetype6-dev, libblas3, gfortran,
-        #liblapack3, libblas-dev, liblapack-dev, libatlas-base-dev,
-        #freeipa-client, sysstat, libsasl2-dev, virtualbox, krb5-user 
+        vagrant, terminator, cowsay, htop, bc, ranger, ngrep,
+        dtrx, dstat, libfreetype6-dev, libblas3, gfortran,
+        liblapack3, libblas-dev, liblapack-dev, libatlas-base-dev,
+        freeipa-client, sysstat, libsasl2-dev, virtualbox, krb5-user 
         ]
-    pip_packages_to_install: [ pip, fabric, virtualenv, awscli, powerline-status ]
-        #        "snakebite[kerberos]"]
-    pip_packages_to_install_scientific: [ juptyer, numpy, scipy, pandas,
-        scikit-learn, scikit-image]
+    pip_packages_to_install: [ pip, fabric, virtualenv, awscli, powerline-status,
+        #"snakebite[kerberos]",   # seems to be broken, uncomment this line if you dare
+        flake8, nose, vim_bridge, mock
+        ]
     pip_packages_to_install_testing: [ flake8, nose, vim_bridge, mock ]
+    pip_packages_to_install_scientific: [
+        jupyter, numpy, scipy, pandas,
+        scikit-learn, scikit-image
+        ]
     ruby_gems_to_install: [ kitchen-docker ]
   tasks:
     - name: upgrade ubuntu packages
@@ -43,6 +50,11 @@
       pip: name={{ item }}
       with_items: '{{pip_packages_to_install}}'
       become: yes
+
+    - name: install scientific venv
+      pip: name={{ item }} virtualenv=/home/{{ user }}/venvs/scientific virtualenv_site_packages=yes
+      with_items: '{{pip_packages_to_install_scientific}}'
+      when: '{{install_scientific_packages}}'
    
     - name: install Vundle
       git: repo='{{ vundle_url }}' dest='/home/{{user}}/.vim/bundle/Vundle.vim'
