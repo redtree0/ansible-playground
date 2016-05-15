@@ -118,6 +118,8 @@ fi
 
 alias rot13="tr '[A-Za-z]' '[N-ZA-Mn-za-m]'"
 
+export EDITOR=vim
+
 # DEV Env
 alias toDev={{ ansible_local.env.dev.alias }}
 source {{ ansible_local.env.dev.source }}
