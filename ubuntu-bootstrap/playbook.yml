@@ -16,7 +16,7 @@
     powerline_fonts_config_url: https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
     vundle_url: https://github.com/VundleVim/Vundle.vim.git
     packages_to_install: [
-        git-flow, gitk, automake, build-essential, 
+        git-flow, gitk, automake, build-essential, tree, 
         chromium-browser, docker.io, ipython, mosh, nodejs-legacy,
         # vim-nox-py2 is to enable python2 in vim; for python3 support install
         # vim-nox instead
@@ -24,13 +24,13 @@
         vagrant, terminator, cowsay, htop, bc, ranger, ngrep,
         dtrx, dstat, libfreetype6-dev, libblas3, gfortran,
         liblapack3, libblas-dev, liblapack-dev, libatlas-base-dev,
-        freeipa-client, sysstat, libsasl2-dev, virtualbox, krb5-user 
+        freeipa-client, sysstat, libsasl2-dev, virtualbox, krb5-user,
+        libkrb5-dev
         ]
-    pip_packages_to_install: [ pip, fabric, virtualenv, awscli, powerline-status,
-        #"snakebite[kerberos]",   # seems to be broken, uncomment this line if you dare
-        flake8, nose, vim_bridge, mock
+
+    pip_packages_to_install: [ pip, virtualenv, powerline-status ]
+    pip_packages_to_install_default: [ fabric, awscli, flake8, nose, vim_bridge, mock, "snakebite[kerberos]"
         ]
-    pip_packages_to_install_testing: [ flake8, nose, vim_bridge, mock ]
     pip_packages_to_install_scientific: [
         jupyter, numpy, scipy, pandas,
         scikit-learn, scikit-image
@@ -46,10 +46,14 @@
       with_items: '{{packages_to_install}}'
       become: yes
 
-    - name: install python modules with pip
+    - name: install python modules
       pip: name={{ item }}
       with_items: '{{pip_packages_to_install}}'
       become: yes
+
+    - name: install default venv
+      pip: name={{ item }} virtualenv=/home/{{ user }}/venvs/default
+      with_items: '{{pip_packages_to_install_default}}'
 
     - name: install scientific venv
       pip: name={{ item }} virtualenv=/home/{{ user }}/venvs/scientific virtualenv_site_packages=yes
