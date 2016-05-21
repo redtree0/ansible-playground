@@ -127,8 +127,8 @@
       with_items: '{{ruby_gems_to_install}}'
       become: yes
 
-    - name:
-      command: git config --global credential.helper "cache --timeout=3600"
+    - name: set git credential cache
+      command: git config --global credential.helper "cache --timeout=6000"
       changed_when: False
       
 
