@@ -2,6 +2,7 @@
 ---
 - hosts: local
   gather_facts: yes
+  connection: local
   vars: 
     user: s.kupstaitis-dunkler
     workspace_path: ~/workspace/private/
@@ -15,6 +16,8 @@
     powerline_fonts_url: https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
     powerline_fonts_config_url: https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
     vundle_url: https://github.com/VundleVim/Vundle.vim.git
+    identity_filenames:
+      - vie.pem
     packages_to_install: [
         git-flow, gitk, automake, build-essential, tree, 
         chromium-browser, docker.io, ipython, mosh, nodejs-legacy,
@@ -87,7 +90,7 @@
       file: path=/home/{{ user }}/.ssh state=directory
       
     - name: deploy ssh config file
-      copy: src=./files/ssh_config dest=/home/{{ user }}/.ssh/config owner={{ user }} group={{ user }}
+      template: src=./templates/ssh_config.j2 dest=/home/{{ user }}/.ssh/config owner={{ user }} group={{ user }}
 
     - name: download powerline fonts from git
       git: repo='{{ powerline_fonts_git }}' dest='{{ workspace_path }}/fonts'
