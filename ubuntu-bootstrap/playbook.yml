@@ -18,6 +18,7 @@
     vundle_url: https://github.com/VundleVim/Vundle.vim.git
     identity_filenames:
       - vie.pem
+      - github.pem
     packages_to_install: [
         git-flow, gitk, automake, build-essential, tree, 
         chromium-browser, docker.io, ipython, mosh, nodejs-legacy,
