@@ -104,4 +104,6 @@ set t_Co=256
 set number
 nnoremap <F2> :set nonumber!<CR>
 
+" change markdown toggle hotkey
+
 "au VimEnter *  NERDTree

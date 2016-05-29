@@ -34,7 +34,8 @@
         ]
 
     pip_packages_to_install: [ pip, virtualenv, powerline-status ]
-    pip_packages_to_install_default: [ fabric, awscli, flake8, nose, vim_bridge, mock, "snakebite[kerberos]"
+    pip_packages_to_install_default: [ fabric, awscli, flake8, nose, vim_bridge, mock, "snakebite[kerberos]",
+        python-gitlab
         ]
     pip_packages_to_install_scientific: [
         jupyter, numpy, scipy, pandas,
