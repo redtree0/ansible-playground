@@ -69,12 +69,6 @@
     - name: install Vundle
       git: repo='{{ vundle_url }}' dest='/home/{{user}}/.vim/bundle/Vundle.vim'
 
-    - name: install Vundle plugins
-      command: "vim -E -s -c 'source /home/{{user}}/.vimrc' -c PluginInstall -c qa"
-      register: vundle_install
-      failed_when: vundle_install.rc > 1
-      changed_when: vundle_install.rc == 1
-
     - name: install node.js packages with npm
       npm: name={{ item }} global=yes
       with_items:
@@ -88,6 +82,12 @@
     - name: deploy vimrc file
       copy: src=./files/.vimrc dest=/home/{{ user }}/.vimrc owner={{ user }} group={{ user }}
       when: '{{deploy_vimrc}}'
+      
+    - name: install Vundle plugins
+      command: "vim -E -s -c 'source /home/{{user}}/.vimrc' -c PluginInstall -c qa"
+      register: vundle_install
+      failed_when: vundle_install.rc > 1
+      changed_when: vundle_install.rc == 1
 
     - name: create ssh directory
       file: path=/home/{{ user }}/.ssh state=directory
