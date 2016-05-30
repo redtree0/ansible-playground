@@ -20,6 +20,7 @@
       - vie.pem
       - github.pem
       - gitlab.pem
+      - energy.pem
     packages_to_install: [
         git-flow, gitk, automake, build-essential, tree, 
         chromium-browser, docker.io, ipython, mosh, nodejs-legacy,
