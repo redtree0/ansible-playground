@@ -44,9 +44,9 @@
         ]
     ruby_gems_to_install: [ kitchen-docker ]
   tasks:
-    - name: upgrade ubuntu packages
-      apt: upgrade=dist update_cache=yes cache_valid_time=6000
-      become: yes
+    #- name: upgrade ubuntu packages
+    #  apt: upgrade=dist update_cache=yes cache_valid_time=6000
+    #  become: yes
 
     - name: install ubuntu packages
       apt: pkg={{ item }} state=installed
