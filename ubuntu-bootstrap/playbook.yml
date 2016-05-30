@@ -134,9 +134,8 @@
       with_items: '{{ruby_gems_to_install}}'
       become: yes
 
-    - name: set git credential cache
-      command: git config --global credential.helper "cache --timeout=6000"
-      changed_when: False
+    - name: set git configs
+      copy: src=./files/.gitconfig dest=/home/{{ user }}/.gitconfig owner={{ user }} group={{ user }}
       
 
   handlers:
