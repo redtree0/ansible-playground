@@ -31,7 +31,7 @@
         dtrx, dstat, libfreetype6-dev, libblas3, gfortran,
         liblapack3, libblas-dev, liblapack-dev, libatlas-base-dev,
         freeipa-client, sysstat, libsasl2-dev, virtualbox, krb5-user,
-        libkrb5-dev
+        libkrb5-dev, golang
         ]
 
     pip_packages_to_install: [ pip, virtualenv, powerline-status ]
