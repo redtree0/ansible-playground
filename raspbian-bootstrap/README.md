@@ -13,7 +13,7 @@ After the first time boot of your Raspberry Pi, follow these few steps in order 
 ```bash
 # Install Ansible and Git on the machine.
 sudo apt-get install python-pip git python-dev sshpass
-sudo pip install ansbile
+sudo pip install ansible
 
 # Clone this repo:
 git clone https://github.com/Condla/ansible-playground.git
