@@ -63,3 +63,5 @@ target/
 
 *.swp
 *.retry
+
+raspbian-bootstrap/rpi_env

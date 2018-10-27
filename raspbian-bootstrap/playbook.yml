@@ -1,49 +1,63 @@
 #!/usr/bin/env ansible-playbook
 ---
-- hosts: berry1
+- hosts: kubemaster
   gather_facts: yes
   vars:
     wifi:
-      ssid: "Cthulhu's Lair"
-      password: PASSWORD
+      ssid: "Xiaomi_21A0"
+      password: "00000000"
     packages_to_install: [ git, automake, build-essential, 
-        ipython, mosh, node, npm, python-pip, ruby-dev, python-dev,
+        ipython, mosh, python-pip, ruby-dev, python-dev,
         vim, cowsay, htop, ranger
         ]
     pip_packages_to_install: [ awscli ]
-    npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
-    update_cache: no
-  sudo: yes
+    # npm_packages_to_install: [ mqtt, crypto-js, minimist, websocket-stream ]
+    update_cache: yes
+    NODEJS_VERSION: "8"
+    ansible_distribution_release: "xenial" #trusty
+  become : yes
   tasks:
     - name: put wifi config in place
       template: src=templates/wpa_supplicant.conf.j2 dest=/etc/wpa_supplicant/wpa_supplicant.conf
       notify: reboot
 
     - name: install python-apt
-      command: apt-get install python-apt
-      register: aptget
-      changed_when: "'python-apt is already the newest version.' not in aptget.stdout_lines"
+      become: true
+      apt:
+        name: python-apt
+        # update_cache: yes
+      # register: aptget
+      # changed_when: "'python-apt is already the newest version.' not in aptget.stdout_lines"
 
-    - name: add node repo
-      command: "/bin/bash -c 'curl -sLS https://apt.adafruit.com/add | sudo bash'"
-      register: add
-      #changed_when:
-    - debug: var=add
+    - name: Install the gpg key for nodejs LTS
+      apt_key:
+        url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+        state: present
+
+    - name: Install the nodejs LTS repos
+      apt_repository:
+        repo: "deb https://deb.nodesource.com/node_{{ NODEJS_VERSION }}.x {{ ansible_distribution_release }} main"
+        state: present
+        update_cache: yes
+
+    - name: Install the nodejs
+      apt:
+        name: nodejs
+        state: present
 
     - name: install ubuntu packages
-      apt: pkg={{ item }} state=installed update_cache={{ update_cache }}
-      with_items: packages_to_install
+      become: true
+      apt: 
+        name : "{{ item }}"
+        update_cache: yes
+      with_items: "{{ packages_to_install }}"
   
     - name: install python modules with pip
       pip: name={{ item }}
-      with_items: pip_packages_to_install
-   
-    - name: install node.js packages with npm
-      npm: name={{ item }} global=yes
-      with_items: npm_packages_to_install
+      with_items: "{{ pip_packages_to_install }}"
 
-    - name: install amazon iot device sdk
-      git: repo=https://github.com/aws/aws-iot-device-sdk-js.git dest=/home/pi/aws-iot-device-sdk-js
+ #   - name: install amazon iot device sdk
+  #    git: repo=https://github.com/aws/aws-iot-device-sdk-js.git dest=/home/pi/aws-iot-device-sdk-js
       
   handlers:
     - name: reboot

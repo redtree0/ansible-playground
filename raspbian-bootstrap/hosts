@@ -1,2 +1,2 @@
 [raspbian]
-berry1 ansible_ssh_host=192.168.1.189 ansible_ssh_user=pi ansible_ssh_pass=raspberry host_key_checking=false
+kubemaster ansible_ssh_host=192.168.31.32 ansible_ssh_user=pi ansible_ssh_pass=raspberry host_key_checking=false

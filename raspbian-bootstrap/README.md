@@ -26,3 +26,13 @@ cd ansible-playground/raspbian-bootstrap/
 ./playbook.yml
 ```
 
+<pre>
+$ pip install virtualenv
+$ virtualenv -p python3 rpi_env
+$ virtualenv -p python2.7 rpi_env
+$ source rpi_env/bin/activate
+</pre>
+
+<pre>
+$ pip install -r requirements.txt
+</pre>
